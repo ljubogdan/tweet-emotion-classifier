@@ -24,9 +24,7 @@ A TensorFlow-powered Recurrent Neural Network (RNN) for multi-class emotion clas
    ```
 
 ### Project Structure
-- `data/`: Tweet emotion dataset
 - `src/`: Source code for preprocessing and model
-- `models/`: Trained RNN model
 
 ### Usage
 1. Import and preprocess the tweet dataset.
