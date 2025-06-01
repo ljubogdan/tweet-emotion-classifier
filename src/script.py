@@ -80,4 +80,65 @@ def get_sequences(tokenizer, tweets):
 
 padded_train = get_sequences(tokenizer, train_tweets)
 
+# preparing labels
+
+classes = set(train_labels)
+print("Classes:", classes) # 6 classes
+
+plt.hist(train_labels, bins = 11)
+plt.show()
+
+class_to_index = {c: i for i, c in enumerate(classes)}
+index_to_class = {v: k for k, v in class_to_index.items()}
+
+names_to_ids = lambda labels: np.array([class_to_index.get(x) for x in labels]) 
+
+train_labels = names_to_ids(train_labels)
+
+# creating the model
+
+model = tf.keras.Sequential([
+    tf.keras.layers.Embedding(10000, 16, input_length=maxlength),
+    tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(20, return_sequences=True)),
+    tf.keras.layers.Bidirectional(tf.keras.layers.LSTM(20)),
+    tf.keras.layers.Dense(64, activation='softmax'),
+])
+
+model.compile(
+    loss="sparse_categorical_crossentropy",
+    optimizer="adam",
+    metrics=["accuracy"]
+)
+
+val_tweets, val_labels = get_tweets(val)
+val_sequences = get_sequences(tokenizer, val_tweets)
+val_labels = names_to_ids(val_labels)
+
+h = model.fit(
+    padded_train, 
+    train_labels, 
+    validation_data=(val_sequences, val_labels), 
+    epochs=20, 
+    callbacks=[
+        tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+    ]
+)
+
+show_history(h)
+
+# evaluating the model
+
+test_tweets, test_labels = get_tweets(test)
+test_sequences = get_sequences(tokenizer, test_tweets)
+test_labels = names_to_ids(test_labels)
+
+_ = model.evaluate(test_sequences, test_labels)
+
+print("Sentence:", test_tweets[0])
+print("True label:", index_to_class.get(test_labels[0]))
+
+predictions = model.predict(np.expand_dims(test_sequences[0], axis=0))
+predicted_label = index_to_class[np.argmax(predictions).astype("uint8")]
+
+
 
