@@ -49,3 +49,5 @@ A TensorFlow-powered Recurrent Neural Network (RNN) for multi-class emotion clas
 - TensorFlow 2.x
 - NumPy
 - Pandas
+- Nlp
+- matplotlib
