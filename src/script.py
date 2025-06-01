@@ -140,5 +140,6 @@ print("True label:", index_to_class.get(test_labels[0]))
 predictions = model.predict(np.expand_dims(test_sequences[0], axis=0))
 predicted_label = index_to_class[np.argmax(predictions).astype("uint8")]
 
+print("Predicted label:", predicted_label)
 
 
