@@ -16,11 +16,11 @@ A TensorFlow-powered Recurrent Neural Network (RNN) for multi-class emotion clas
    ```
 2. Install dependencies:
    ```bash
-   pip install tensorflow numpy pandas
+   pip install tensorflow numpy pandas matplotlib nlp
    ```
 3. Run the project:
    ```bash
-   python main.py
+   python script.py
    ```
 
 ### Project Structure
